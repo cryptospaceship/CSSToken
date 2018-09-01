@@ -24,6 +24,7 @@ contract SpaceShipFactory is Ownable {
     mapping (uint => address) public shipToOwner;
     mapping (address => uint) ownerShipCount;
     mapping (uint => bool) public shipExist;
+    mapping (bytes32 => bool) shipNameHash;
     
     uint public totalShips;
     uint public maxShipSupply;
@@ -132,6 +133,14 @@ contract SpaceShipFactory is Ownable {
         returns(uint)
     {
         uint _id = nextId;
+        bytes32 nameHash = keccak256(name);
+
+        require(
+            shipNameHash[nameHash] == false;
+        );
+
+        shipNameHash[nameHash] = true;
+
         ships[_id].name = name;
         ships[_id].color = color;
         ships[_id].launch = block.number;
