@@ -68,73 +68,23 @@ contract SpaceShipGameplay is SpaceShipGame {
         return true;
     }
 
-    /**
-     * @dev Increment the number of takedowns after a battle. Only the game
-     * can call this function
-     * @param _ship the ship ID
-     * @param _takedowns the number of takedows
-     * @return bool    
-     */
-    function gameIncTakedownsToShip(uint _ship, uint _takedowns)
-        external 
-        onlyGame(_ship) 
-        returns(bool) 
-    {
-        ships[_ship].takedowns = ships[_ship].takedowns.add(_takedowns);
-        return true;
-    }
-    
-    /**
-     * @dev Increment in 1 the number of wins. Only the game can call this function
-     * @param _ship Ship ID
-     */
-    function gameIncWinsToShip(uint _ship) 
-        external 
-        onlyGame(_ship) 
-        returns(bool) 
-    {
-        ships[_ship].wins = ships[_ship].wins.add(1);
-        return true;
-    }
-    
-    /**
-     * @dev Increment in 1 the number of Losses. Only the game can call this function
-     * @param _ship Ship ID
-     */
-    function gameIncLossesToShip(uint _ship) 
-        external 
-        onlyGame(_ship) 
-        returns(bool) 
-    {
-        ships[_ship].losses = ships[_ship].losses.add(1);
-        return true;
-    }
-
-    function gameSetBattleLose(uint _ship, uint takedowns)
-        external
-        onlyGame(_ship)
-        returns(bool)
-    {
-        ships[_ship].losses += 1;
-        ships[_ship].takedowns += takedowns;
-        return true;
-    }
-
-    function gameSetBattleWin(uint _ship, uint takedowns)
-        external
-        onlyGame(_ship)
-        returns(bool)
-    {
-        ships[_ship].wins += 1;
-        ships[_ship].takedowns += takedowns;
-        return true;
-    }
-
-    function changeShipName(uint _ship, string _name)
+    function setQAIM(uint _ship, uint[32] qaim)
         external
         onlyShipOwner(_ship)
     {
-        ships[_ship].name = _name;
+        uint i;
+        uint points = 0;
+        Ship storage s = ships[_ship];
+        
+        for (i = 0; i <= 32-1; i++) {
+            points = points + qaim[i];
+            s.qaim[i] = s.qaim[i] + uint8(qaim[i]);
+        }
+        require(
+            canAssign(ship,points), 
+            "Asigned points are grather than available points"
+        );
+        ship.unassignedPoints = ship.unassignedPoints - points;
     }
 
     function getUnassignedPoints(uint _ship)
@@ -207,7 +157,6 @@ contract SpaceShipGameplay is SpaceShipGame {
         }
         return result;
     } 
-
 
     function getShipQaim(uint _ship) 
         external 

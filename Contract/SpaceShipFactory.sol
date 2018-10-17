@@ -65,11 +65,10 @@ contract SpaceShipFactory is Ownable {
     function createShip(string name, uint color) 
         external 
         payable
-        returns(uint)
     {
         require(totalShips + 1 < maxShipSupply);
         require(msg.value == shipPrice);
-        return _createShip(name, color);	
+        _createShip(name, color);	
     }
 
     /**
@@ -105,6 +104,20 @@ contract SpaceShipFactory is Ownable {
         return shipPrice;	
     }
 
+    /**
+     * @dev check if name is elegible
+     * @param name nombre
+     * @return true or false
+     */
+    function checkName(string name)
+        external
+        view
+        returns(bool)
+    {
+        bytes32 nameHash = keccak256(name);
+        return !shipNameHash[nameHash];
+    }
+
     function getBalance() 
         external
         view
@@ -138,18 +151,20 @@ contract SpaceShipFactory is Ownable {
         require(
             shipNameHash[nameHash] == false;
         );
+        nextId = nextId.add(1);
 
         shipNameHash[nameHash] = true;
+        shipExist[_id] = true;
+        shipToOwner[_id] = msg.sender;
 
         ships[_id].name = name;
         ships[_id].color = color;
         ships[_id].launch = block.number;
-        shipExist[_id] = true;
-        nextId = nextId.add(1);
+        ships[_id].unassignedPoints = 5;
+        
         totalShips = totalShips.add(1);
-        shipToOwner[_id] = msg.sender;
+
         ownerShipCount[msg.sender] = ownerShipCount[msg.sender].add(1);
         emit ShipCreation(_id, name, msg.sender, block.number);
-        return _id;
     }
 }
