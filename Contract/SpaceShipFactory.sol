@@ -1,9 +1,9 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.25;
 
 import "./SafeMath.sol";
-import "./Ownable.sol";
+import "./Mortal.sol";
 
-contract SpaceShipFactory is Ownable {
+contract SpaceShipFactory is Mortal {
 
         
     struct Ship {
