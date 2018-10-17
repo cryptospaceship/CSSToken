@@ -158,7 +158,7 @@ contract SpaceShipGameplay is SpaceShipGame {
         return result;
     } 
 
-    function getShipQaim(uint _ship) 
+    function getShipQAIM(uint _ship) 
         external 
         view 
         returns 
@@ -167,6 +167,14 @@ contract SpaceShipGameplay is SpaceShipGame {
         ) 
     {
         qaim = ships[_ship].qaim;
+    }
+
+    function getQAIM(uint _ship, uint qaim)
+        external
+        view
+        returns(uint)
+    {
+        return uint(ships[_ship].qaim[qaim]);
     }
 
     function _setGame(uint _ship, uint _game) 
