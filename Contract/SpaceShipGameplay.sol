@@ -81,10 +81,10 @@ contract SpaceShipGameplay is SpaceShipGame {
             s.qaim[i] = s.qaim[i] + uint8(qaim[i]);
         }
         require(
-            canAssign(ship,points), 
+            canAssign(_ship,points), 
             "Assigned points are grather than available points"
         );
-        ship.unassignedPoints = ship.unassignedPoints - points;
+        s.unassignedPoints = s.unassignedPoints - points;
     }
 
     function getUnassignedPoints(uint _ship)

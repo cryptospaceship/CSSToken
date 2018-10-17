@@ -114,7 +114,7 @@ contract SpaceShipFactory is Ownable {
         view
         returns(bool)
     {
-        bytes32 nameHash = keccak256(name);
+        bytes32 nameHash = keccak256(bytes(name));
         return !shipNameHash[nameHash];
     }
 
@@ -146,10 +146,10 @@ contract SpaceShipFactory is Ownable {
         returns(uint)
     {
         uint _id = nextId;
-        bytes32 nameHash = keccak256(name);
+        bytes32 nameHash = keccak256(bytes(name));
 
         require(
-            shipNameHash[nameHash] == false;
+            shipNameHash[nameHash] == false
         );
         nextId = nextId.add(1);
 
