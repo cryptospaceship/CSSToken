@@ -82,7 +82,7 @@ contract SpaceShipGameplay is SpaceShipGame {
         }
         require(
             canAssign(ship,points), 
-            "Asigned points are grather than available points"
+            "Assigned points are grather than available points"
         );
         ship.unassignedPoints = ship.unassignedPoints - points;
     }
