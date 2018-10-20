@@ -4,6 +4,7 @@ import "./SpaceShipFactory.sol";
 import "./AddressUtils.sol";
 import "./SafeMath.sol";
 
+
 contract GameInterface {
     function placeShip(uint _ship) external returns(bool);
     function unplaceShip(uint _ship) external returns(bool);

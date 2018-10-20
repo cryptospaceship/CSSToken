@@ -1,23 +1,22 @@
 pragma solidity ^0.4.25;
 
+import "./SpaceShipUpgrade.sol";
 import "./SafeMath.sol";
 import "./Mortal.sol";
 
-contract SpaceShipFactory is Mortal {
-
-        
+contract SpaceShipFactory is SpaceShipUpgrade {
     struct Ship {
-        string name;
+        string name;    
         uint color;
-        uint gameId;
+        uint gen;
+        uint points;
         uint level;
-        uint takedowns;
+        uint plays;
         uint wins;
-        uint losses;
         uint8[32] qaim;
         uint unassignedPoints;
-        uint gen;
         uint launch;
+        uint gameId;
     }
 
     mapping (uint => Ship) ships;
@@ -28,13 +27,14 @@ contract SpaceShipFactory is Mortal {
     
     uint public totalShips;
     uint public maxShipSupply;
-    uint public shipBaseId;
+    uint shipBaseId;
     uint nextId;
+    uint currentGen;
 
     /*
      * SpaceShip price
      */
-    uint public shipPrice;
+    uint shipPrice;
 
     using SafeMath for uint;
     
@@ -161,7 +161,8 @@ contract SpaceShipFactory is Mortal {
         ships[_id].color = color;
         ships[_id].launch = block.number;
         ships[_id].unassignedPoints = 5;
-        
+        ships[_id].gen = currentGen;
+
         totalShips = totalShips.add(1);
 
         ownerShipCount[msg.sender] = ownerShipCount[msg.sender].add(1);
