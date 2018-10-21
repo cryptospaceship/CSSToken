@@ -1,10 +1,11 @@
 pragma solidity ^0.4.25;
 
-import "./SpaceShipUpgrade.sol";
+import "./CSSGenAttrib.sol";
 import "./SafeMath.sol";
 import "./Mortal.sol";
 
-contract SpaceShipFactory is SpaceShipUpgrade {
+contract SpaceShipFactory is CSSGenAttrib {
+
     struct Ship {
         string name;    
         uint color;
@@ -160,7 +161,7 @@ contract SpaceShipFactory is SpaceShipUpgrade {
         ships[_id].name = name;
         ships[_id].color = color;
         ships[_id].launch = block.number;
-        ships[_id].unassignedPoints = 5;
+        ships[_id].unassignedPoints = getBasePoints(currentGen);
         ships[_id].gen = currentGen;
 
         totalShips = totalShips.add(1);

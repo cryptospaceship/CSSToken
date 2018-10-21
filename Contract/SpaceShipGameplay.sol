@@ -44,7 +44,7 @@ contract SpaceShipGameplay is SpaceShipGame {
     }	
     
     /**
-     *
+     * Falta colectar los puntos
      */
     function unsetGame(uint _ship) 
         external 
@@ -120,26 +120,28 @@ contract SpaceShipGameplay is SpaceShipGame {
         view 
         returns 
         (
+            address owner,
             string name,
             uint color,
-            bool inGame,
-            address owner,
+            uint gen,
+            uint points,
             uint level,
-            uint takedowns,
+            uint plays,
             uint wins,
-            uint losses,
-            uint launch
+            uint launch,
+            bool inGame
         ) 
     {
+        owner = shipToOwner[_ship];
         name = ships[_ship].name;
         color = ships[_ship].color;
-        inGame = gameValid[ships[_ship].gameId];
-        owner = shipToOwner[_ship];
+        gen = ships[_ship].gen;
+        points = ships[_ship].points;
         level = ships[_ship].level;
-        takedowns = ships[_ship].takedowns;
+        plays = ships[_ship].plays;
         wins = ships[_ship].wins;
-        losses = ships[_ship].losses;
         launch = ships[_ship].launch;
+        inGame = gameValid[ships[_ship].gameId];
     }
 
     function getShipsByOwner(address _owner) 
@@ -182,7 +184,8 @@ contract SpaceShipGameplay is SpaceShipGame {
         returns(bool)
     {
         ships[_ship].gameId = _game;
-        game[_game].players = game[_game].players.add(1);
+        ships[_ship].plays = ship[_ship].plays.add(1);
+
         return true;
     }
     
@@ -191,7 +194,6 @@ contract SpaceShipGameplay is SpaceShipGame {
         returns(bool) 
     {
         ships[_ship].gameId = invalidGame();
-        game[_game].players = game[_game].players.sub(1);
         return true;
     }
 }

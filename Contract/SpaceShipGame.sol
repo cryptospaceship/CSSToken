@@ -6,21 +6,14 @@ import "./SafeMath.sol";
 
 
 contract GameInterface {
-    function placeShip(uint _ship) external returns(bool);
     function unplaceShip(uint _ship) external returns(bool);
-    function getGame() external view returns(string,uint,uint,uint);
 }
 
 contract SpaceShipGame is SpaceShipFactory {
 
     struct Game {
-        string name;
         GameInterface gameInterface;
         address	addr;
-        uint players;
-        uint blockReleased;
-        uint gameLaunch;
-        uint playValue;
     }
 
     mapping (uint => Game) game;
@@ -60,9 +53,6 @@ contract SpaceShipGame is SpaceShipFactory {
         gameIds = gameIds.add(1);
         gameAddr[_contract] = _id;
         game[_id].addr = _contract;
-        game[_id].players = 0;
-        game[_id].gameInterface = GameInterface(_contract);
-        (game[_id].name,game[_id].gameLaunch,,game[_id].playValue) = game[_id].gameInterface.getGame();
         gameValid[_id] = true;
         return _id;
     }
@@ -119,24 +109,10 @@ contract SpaceShipGame is SpaceShipFactory {
      * @return value Price in wei to play
      */
     function getGame(uint _id) external view
-        returns
-        (
-            string name,
-            address addr,
-            uint id,
-            uint players,
-            uint gameLaunch,
-            uint value,
-            uint reward
-        )
+        returns (uint id, address addr)
     {
-        name = game[_id].name;
         addr = game[_id].addr;
         id = _id;
-        players = game[_id].players;
-        gameLaunch = game[_id].gameLaunch;
-        value = game[_id].playValue;
-        (,,reward,) = game[_id].gameInterface.getGame();
     }
 
     /**

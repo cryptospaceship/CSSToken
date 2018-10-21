@@ -2,16 +2,6 @@ pragma solidity ^0.4.23;
 
 contract SpaceShipInterface {
 
-    function gameIncTakedownsToShip(uint _ship, uint _takedowns) external returns(bool);
-
-    function gameIncWinsToShip(uint _ship) external returns(bool);
-
-    function gameIncLossesToShip(uint _ship) external returns(bool);
-
-    function gameSetBattleLose(uint _ship, uint takedowns) external returns(bool);
-
-    function gameSetBattleWin(uint _ship, uint takedowns) external returns(bool);
-
     function throwShip(uint _ship) external returns(bool);
 
     function getQAIM(uint _ship, uint qaim) external view returns(uint);
