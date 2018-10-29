@@ -4,7 +4,7 @@ import "./Mortal.sol";
 import "./AddressUtils.sol";
 
 contract CSSGenAttribInterface {
-    function calcLevel(uint level, uint points, uint get, uint pointsEarned) 
+    function genUpgradeLevel(uint _level, uint _points, uint get, uint pointsEarned) 
         external 
         pure 
         returns (
@@ -13,7 +13,6 @@ contract CSSGenAttribInterface {
             uint qaimPoints, 
             uint points
         );
-
     function getGenQAIM(uint gen) external pure returns (uint qaim);
     function getGenBasePoints(uint gen) external pure returns (uint bp);
 }
@@ -21,11 +20,7 @@ contract CSSGenAttribInterface {
 contract CSSGenAttrib is Mortal {
         
     using AddressUtils for address;
-    address Interface;
-
-    constructor() public {
-        Interface = address(0);
-    }
+    CSSGenAttribInterface Interface;
 
     function setCSSGenAttribInterface(address _contract)
         external
@@ -35,7 +30,7 @@ contract CSSGenAttrib is Mortal {
         Interface = CSSGenAttribInterface(_contract);
     }
 
-    function calcLevel(uint level, uint points, uint gen, uint pointsEarned)
+    function genUpgradeLevel(uint _level, uint _points, uint gen, uint pointsEarned)
         internal
         view
         returns (
@@ -43,15 +38,15 @@ contract CSSGenAttrib is Mortal {
             uint progress, 
             uint qaimPoints, 
             uint points
-        );
+        )
     {
         if (Interface == address(0)) {
-            level = level;
+            level = _level;
             progress = 0;
             qaimPoints = 0;
-            points = points + pointsEarned;
+            points = _points + pointsEarned;
         } else {
-            (level,progress,qaimPoints,points) = Interface.calcLevel(level,points,gen,pointsEarned);
+            (level,progress,qaimPoints,points) = Interface.genUpgradeLevel(_level,_points,gen,pointsEarned);
         }
     }
 
@@ -66,7 +61,7 @@ contract CSSGenAttrib is Mortal {
             return Interface.getGenQAIM(gen);
     }
 
-    function getBasePoints(uint gen)
+    function getGenBasePoints(uint gen)
         internal
         view
         returns(uint)
@@ -74,6 +69,6 @@ contract CSSGenAttrib is Mortal {
         if (Interface == address(0))
             return 5;
         else 
-            return Interface.getBasePoints(gen);
+            return Interface.getGenBasePoints(gen);
     }
 }

@@ -161,7 +161,7 @@ contract SpaceShipFactory is CSSGenAttrib {
         ships[_id].name = name;
         ships[_id].color = color;
         ships[_id].launch = block.number;
-        ships[_id].unassignedPoints = getBasePoints(currentGen);
+        ships[_id].unassignedPoints = getGenBasePoints(currentGen);
         ships[_id].gen = currentGen;
 
         totalShips = totalShips.add(1);

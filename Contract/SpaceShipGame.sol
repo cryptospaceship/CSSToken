@@ -6,7 +6,7 @@ import "./SafeMath.sol";
 
 
 contract GameInterface {
-    function unplaceShip(uint _ship) external returns(bool);
+    function removeShip(uint _ship) external returns(bool win, uint points);
 }
 
 contract SpaceShipGame is SpaceShipFactory {
@@ -19,11 +19,11 @@ contract SpaceShipGame is SpaceShipFactory {
     mapping (uint => Game) game;
     mapping (uint => bool) gameValid;
     mapping (address => uint) gameAddr;
-    uint    gameCount;
-    uint    gameIds;
+    uint gameCount;
+    uint gameIds;
 
-    using SafeMath for uint;
     using AddressUtils for address;
+    using SafeMath for uint;
 
     modifier onlyGame(uint _shipId) {
         require(isSettedGame(msg.sender,_shipId));

@@ -9,7 +9,7 @@ contract SpaceShipGameplay is SpaceShipGame {
 
     modifier canPlaceInGame(uint _ship) {
         require (
-            gameValid[ships[_ship].gameId] == false,
+            isPlaying(_ship) == false,
             "The ship can not place in Game"
         );
         _;
@@ -36,36 +36,42 @@ contract SpaceShipGameplay is SpaceShipGame {
         external 
         onlyValidGame
         canPlaceInGame(_ship)
-        returns(bool) 
     {
         uint _game = gameAddr[msg.sender];
-        require(_setGame(_ship,_game));
-        return true;
+        ships[_ship].gameId = _game;
+        ships[_ship].plays = ships[_ship].plays.add(1);
     }	
     
+    function isPlaying(uint _ship)
+        internal
+        view
+        returns(bool)
+    {
+        return gameValid[ships[_ship].gameId];
+    }
+
     /**
      * Falta colectar los puntos
      */
-    function unsetGame(uint _ship) 
+    function exitGame(uint _ship) 
         external 
         onlyShipOwner(_ship) 
-        returns(bool) 
     {
-        uint _game = ships[_ship].gameId;
-        require(gameValid[_game]);
-        require(game[_game].gameInterface.unplaceShip(_ship) == true);
-        require(_unsetGame(_ship,_game));
-        return true;
-    }
+        Ship storage ship = ships[_ship];
+        uint _game = ship.gameId;
+        uint points;
+        bool win;
 
-    function throwShip(uint _ship)
-        external
-        onlyGame(_ship)
-        returns (bool)
-    {
-        uint _game = ships[_ship].gameId;
-        require(_unsetGame(_ship,_game));
-        return true;
+        require(gameValid[_game]);
+        
+        (win, points) = game[_game].gameInterface.removeShip(_ship);
+
+        if (win) 
+            ship.wins++;
+
+        (ship.level,,ship.unassignedPoints,ship.points) = genUpgradeLevel(ship.level,ship.points,ship.gen,points);
+
+        ship.gameId = invalidGame();
     }
 
     function setQAIM(uint _ship, uint[32] qaim)
@@ -129,6 +135,8 @@ contract SpaceShipGameplay is SpaceShipGame {
             uint plays,
             uint wins,
             uint launch,
+            uint progress,
+            uint qaims,
             bool inGame
         ) 
     {
@@ -141,7 +149,9 @@ contract SpaceShipGameplay is SpaceShipGame {
         plays = ships[_ship].plays;
         wins = ships[_ship].wins;
         launch = ships[_ship].launch;
-        inGame = gameValid[ships[_ship].gameId];
+        (,progress,,) = genUpgradeLevel(level,points,gen,0);
+        qaims = getGenQAIM(gen);
+        inGame = isPlaying(_ship);
     }
 
     function getShipsByOwner(address _owner) 
@@ -178,22 +188,5 @@ contract SpaceShipGameplay is SpaceShipGame {
     {
         return uint(ships[_ship].qaim[qaim]);
     }
-
-    function _setGame(uint _ship, uint _game) 
-        internal 
-        returns(bool)
-    {
-        ships[_ship].gameId = _game;
-        ships[_ship].plays = ship[_ship].plays.add(1);
-
-        return true;
-    }
     
-    function _unsetGame(uint _ship, uint _game)
-        internal 
-        returns(bool) 
-    {
-        ships[_ship].gameId = invalidGame();
-        return true;
-    }
 }

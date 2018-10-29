@@ -19,3 +19,7 @@ Build/AddressUtils.bin
 Build/AddressUtils.abi
 Build/Mortal.bin
 Build/Mortal.abi
+Build/CSSGenAttribInterface.bin
+Build/CSSGenAttribInterface.abi
+Build/CSSGenAttrib.bin
+Build/CSSGenAttrib.abi
