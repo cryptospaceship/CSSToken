@@ -53,6 +53,7 @@ contract SpaceShipGame is SpaceShipFactory {
         gameIds = gameIds.add(1);
         gameAddr[_contract] = _id;
         game[_id].addr = _contract;
+        game[_id].gameInterface = GameInterface(_contract);
         gameValid[_id] = true;
         return _id;
     }

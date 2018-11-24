@@ -4,7 +4,7 @@ import "./Mortal.sol";
 import "./AddressUtils.sol";
 
 contract CSSGenAttribInterface {
-    function genUpgradeLevel(uint _level, uint _points, uint get, uint pointsEarned) 
+    function genUpgradeLevel(uint _level, uint _points, uint gen, uint pointsEarned) 
         external 
         pure 
         returns (
