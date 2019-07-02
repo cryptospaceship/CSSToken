@@ -61,6 +61,7 @@ contract SpaceShipFactory is CSSGenAttrib {
         shipPrice = 0.01 ether;
         shipBaseId = 1000;
         nextId = shipBaseId;
+        currentGen = 0;
     }
 
     function createShip(string name, uint color) 
@@ -81,6 +82,13 @@ contract SpaceShipFactory is CSSGenAttrib {
         onlyOwner
     {
         shipPrice = _price;
+    }
+
+    function setGen(uint _newGen)
+        external
+        onlyOwner
+    {
+        currentGen = _newGen;
     }
 
     /**

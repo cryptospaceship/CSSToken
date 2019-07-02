@@ -101,6 +101,14 @@ contract SpaceShipGameplay is SpaceShipGame {
         return ships[_ship].unassignedPoints;
     }
 
+    function getCurrentGen()
+        external
+        view
+        returns(uint)
+    {
+        return currentGen;
+    }
+
     function canAssign(uint _shipId, uint _points)
         internal
         view
